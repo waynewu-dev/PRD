@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能招聘系统 — 产品需求文档 PRD V1.2</title>
+<style>
+:root {
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --glass: rgba(0,0,0,0.04);
+  --glass-border: #e2e8f0;
+  --primary: #2563eb;
+  --primary-light: #1d4ed8;
+  --primary-dark: #1e40af;
+  --accent: #d97706;
+  --accent-light: #b45309;
+  --success: #059669;
+  --danger: #dc2626;
+  --text: #1e293b;
+  --text-muted: #475569;
+  --text-dim: #94a3b8;
+  --sidebar-w: 260px;
+  --header-h: 60px;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+body::before { display: none; }
+
+/* Sidebar */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: #ffffff;
+  border-right: 1px solid var(--glass-border);
+  z-index: 100;
+  overflow-y: auto;
+  padding: 20px 0;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.04);
+}
+.sidebar-header {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 12px;
+}
+.sidebar-header h2 {
+  font-size: 16px; color: var(--primary-light);
+  font-weight: 700; letter-spacing: 0.5px;
+}
+.sidebar-header .ver {
+  font-size: 11px; color: var(--text-dim); margin-top: 4px;
+}
+
+.nav-section { padding: 8px 20px; }
+.nav-section-title {
+  font-size: 10px; text-transform: uppercase;
+  color: var(--text-dim); letter-spacing: 1.5px;
+  margin: 12px 0 6px; font-weight: 600;
+}
+.nav-item {
+  display: block; padding: 8px 14px;
+  color: var(--text-muted); text-decoration: none;
+  font-size: 13px; border-radius: var(--radius-sm);
+  transition: all 0.2s; margin: 2px 0;
+}
+.nav-item:hover { background: var(--glass); color: var(--text); }
+.nav-item.active { background: rgba(37,99,235,0.08); color: var(--primary-light); font-weight: 600; border-left: 3px solid var(--primary); }
+
+/* Main */
+.main {
+  margin-left: var(--sidebar-w);
+  padding: 40px 60px;
+  max-width: 1100px;
+}
+
+/* Cover */
+.cover { text-align: left; padding: 60px 0 40px; }
+.cover .badge { display: inline-block; background: rgba(37,99,235,0.08); color: var(--primary-light); padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+.cover h1 { font-size: 42px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; color: var(--text); background: none; -webkit-text-fill-color: inherit; }
+.cover .subtitle { font-size: 17px; color: var(--text-muted); margin-bottom: 32px; }
+.cover .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+.cover .meta-item { display: flex; flex-direction: column; }
+.cover .meta-item .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.cover .meta-item .val { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+
+/* Sections */
+.section { margin: 50px 0; }
+.section-title {
+  font-size: 28px; font-weight: 700; margin-bottom: 8px;
+  padding-bottom: 12px; border-bottom: 3px solid var(--primary);
+  color: var(--text);
+}
+.section-subtitle {
+  font-size: 20px; font-weight: 700; margin: 32px 0 12px;
+  color: var(--primary-dark);
+}
+.section-sub3 {
+  font-size: 16px; font-weight: 700; margin: 24px 0 8px;
+  color: var(--accent);
+}
+p { margin: 10px 0; color: var(--text-muted); font-size: 14px; }
+
+/* Table */
+.table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--glass-border); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { background: rgba(37,99,235,0.06); }
+th { padding: 12px 16px; text-align: left; color: var(--primary-light); font-weight: 600; font-size: 12px; letter-spacing: 0.5px; border-bottom: 2px solid var(--glass-border); white-space: nowrap; }
+td { padding: 10px 16px; border-bottom: 1px solid var(--glass-border); color: var(--text-muted); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(37,99,235,0.03); }
+
+/* Tags */
+.tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+.tag-p0 { background: #fee2e2; color: #dc2626; }
+.tag-p1 { background: #fef3c7; color: #b45309; }
+.tag-p2 { background: #dbeafe; color: #1d4ed8; }
+.tag-s { background: #fee2e2; color: #dc2626; }
+.tag-a { background: #fef3c7; color: #b45309; }
+
+/* Cards */
+.card {
+  background: var(--bg-card); border: 1px solid var(--glass-border);
+  border-radius: var(--radius); padding: 24px; margin: 16px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.card-title { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+
+/* Blockquote */
+blockquote {
+  border-left: 3px solid var(--primary);
+  padding: 14px 20px; margin: 16px 0;
+  background: #f0f7ff;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-muted); font-style: italic; font-size: 14px;
+}
+
+/* Architecture Diagram */
+.arch-box {
+  background: var(--bg-card); border: 1px solid var(--glass-border);
+  border-radius: var(--radius); padding: 28px; margin: 20px 0;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.6; white-space: pre; overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* Flowchart SVG wrapper */
+.flowchart { text-align: center; margin: 24px 0; }
+.flowchart svg { max-width: 100%; height: auto; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--glass-border); }
+
+/* Highlight text */
+.highlight { color: var(--primary); font-weight: 600; }
+.warning { color: var(--accent); font-weight: 600; }
+
+/* Status indicator */
+.status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.status-active { background: var(--success); }
+.status-pending { background: var(--accent); }
+.status-closed { background: var(--text-dim); }
+
+/* Footer */
+.footer { margin-top: 60px; padding: 30px 0; border-top: 1px solid var(--glass-border); color: var(--text-dim); font-size: 12px; text-align: center; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 20px; }
+  .cover h1 { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <h2>招聘系统 PRD</h2>
+    <div class="ver">V1.2 &middot; 2026-06-08</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">概述</div>
+    <a href="#cover" class="nav-item active">文档封面</a>
+    <a href="#s1" class="nav-item">1. 市场调研与竞品分析</a>
+    <a href="#s2" class="nav-item">2. 产品定位与设计原则</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">架构</div>
+    <a href="#s3" class="nav-item">3. 系统架构设计</a>
+    <a href="#s3b" class="nav-item">3.5 部署架构</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">功能</div>
+    <a href="#s4" class="nav-item">4. 核心功能模块</a>
+    <a href="#s5" class="nav-item">5. 数据模型设计</a>
+    <a href="#s6" class="nav-item">6. 多HR协同方案</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">交付</div>
+    <a href="#s7" class="nav-item">7. 简历流转与批量入口</a>
+    <a href="#s8" class="nav-item">8. 性能与扩展策略</a>
+    <a href="#s9" class="nav-item">9. 分阶段落地计划</a>
+    <a href="#s10" class="nav-item">10. WorkBuddy组件规格</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">附录</div>
+    <a href="#s11" class="nav-item">11. 风险与应对</a>
+    <a href="#s12" class="nav-item">12. 验收测试标准</a>
+    <a href="#s13" class="nav-item">13. 附录：决策记录</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main">
+
+<!-- Cover -->
+<div id="cover" class="cover">
+  <div class="badge">PRODUCT REQUIREMENTS DOCUMENT</div>
+  <h1>智能招聘系统<br>产品需求文档</h1>
+  <div class="subtitle">基于 WorkBuddy AI Agent 平台 + 企业微信生态构建的新一代智能招聘系统</div>
+  <div class="meta">
+    <div class="meta-item"><span class="label">版本</span><span class="val">V1.2</span></div>
+    <div class="meta-item"><span class="label">日期</span><span class="val">2026-06-08</span></div>
+    <div class="meta-item"><span class="label">产品经理</span><span class="val">吴伟伟</span></div>
+    <div class="meta-item"><span class="label">密级</span><span class="val">内部</span></div>
+    <div class="meta-item"><span class="label">状态</span><span class="val">待评审</span></div>
+  </div>
+</div>
+
+<!-- Section 1: Market Research -->
+<div id="s1" class="section">
+  <h2 class="section-title">一、市场调研与竞品分析</h2>
+
+  <h3 class="section-subtitle">1.1 调研范围</h3>
+  <p>调研了海内外 13+ 款主流招聘系统，覆盖国内头部产品和国际标杆。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>产品</th><th>定位</th><th>核心优势</th></tr></thead>
+      <tbody>
+        <tr><td>Moka</td><td>智能化ATS</td><td>AI简历解析准确率96%+，深度打通微信生态</td></tr>
+        <tr><td>北森</td><td>一体化HR SaaS</td><td>招聘+核心人事+绩效全链路闭环</td></tr>
+        <tr><td>用友大易</td><td>大型企业ATS</td><td>校园招聘场景深度覆盖</td></tr>
+        <tr><td>i人事</td><td>中小企业HR</td><td>轻量化、上手快</td></tr>
+        <tr><td>Greenhouse</td><td>结构化招聘</td><td>面试评分体系最成熟</td></tr>
+        <tr><td>Workday</td><td>全球HRIS内置</td><td>与Core HR天然打通</td></tr>
+        <tr><td>BOSS直聘</td><td>平台+ATS</td><td>流量+工具一体</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">1.2 核心发现</h3>
+  <blockquote>2026年行业趋势：AI能力是最大分水岭，头部产品AI筛选效率比传统产品高5倍；2025年Q1已有73%的企业引入AI面试环节；简历解析准确率已可达96%以上。</blockquote>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>痛点</th><th>严重程度</th><th>我们的机会</th></tr></thead>
+      <tbody>
+        <tr><td>候选人体验差：大多数产品以HR视角设计</td><td>⭐⭐⭐⭐⭐</td><td>自助预约 + 进度透明 + 极简投递</td></tr>
+        <tr><td>招聘-入职数据断层：录用后需重复录入</td><td>⭐⭐⭐⭐</td><td>AI自动同步HRIS</td></tr>
+        <tr><td>面试官协作差：评分表繁琐、移动端体验差</td><td>⭐⭐⭐⭐</td><td>企微内嵌轻量化操作</td></tr>
+        <tr><td>内推激励弱：推荐后无反馈</td><td>⭐⭐⭐</td><td>进度实时可见 + 奖励闭环</td></tr>
+        <tr><td>数据报表封闭：自定义灵活度不足</td><td>⭐⭐⭐</td><td>AI自然语言查询</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 2: Product Positioning -->
+<div id="s2" class="section">
+  <h2 class="section-title">二、产品定位与设计原则</h2>
+
+  <h3 class="section-subtitle">2.1 产品定位</h3>
+  <blockquote>不是"又一个ATS"，而是招聘团队的AI协作层。用WorkBuddy的AI能力做决策和执行，企业微信智能表格做数据持久化，企微连接器做通知触达。</blockquote>
+
+  <h3 class="section-subtitle">2.2 核心设计原则</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>原则</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">AI是第一公民</span></td><td>AI不是"功能按钮"，而是流程引擎。简历进来AI直接给判断和理由</td></tr>
+        <tr><td><span class="highlight">体验双向优先</span></td><td>兼顾HR操作效率和候选人体验，不偏废</td></tr>
+        <tr><td><span class="highlight">数据外挂，AI决策</span></td><td>WorkBuddy负责思考，数据库负责记录，各司其职</td></tr>
+        <tr><td><span class="highlight">流程闭环</span></td><td>从需求提报到入职，不出现手工交接断点</td></tr>
+        <tr><td><span class="highlight">渐进式智能化</span></td><td>先跑通核心流程，再叠加AI和数据深度能力</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">2.3 与传统ATS的本质差异</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>传统ATS（如Moka）</th><th>基于WorkBuddy的招聘系统</th></tr></thead>
+      <tbody>
+        <tr><td>AI角色</td><td>功能插件</td><td><span class="highlight">流程引擎（第一公民）</span></td></tr>
+        <tr><td>操作方式</td><td>点按钮、填表单</td><td><span class="highlight">对话式（自然语言）</span></td></tr>
+        <tr><td>定制化</td><td>配置项有限</td><td><span class="highlight">Skill封装SOP，无限深度</span></td></tr>
+        <tr><td>自动化</td><td>固定规则工作流</td><td><span class="highlight">Automation定时任务，灵活组合</span></td></tr>
+        <tr><td>多角色</td><td>统一界面+权限</td><td><span class="highlight">Expert包按角色分发能力</span></td></tr>
+        <tr><td>数据存储</td><td>自建数据库</td><td><span class="highlight">企业微信智能表格</span></td></tr>
+        <tr><td>上线速度</td><td>月级</td><td><span class="highlight">周级（MVP）</span></td></tr>
+        <tr><td>生态打通</td><td>需额外对接</td><td><span class="highlight">企微通讯录/审批/日程/消息原生打通</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 3: System Architecture -->
+<div id="s3" class="section">
+  <h2 class="section-title">三、系统架构设计</h2>
+
+  <h3 class="section-subtitle">3.1 三层架构总览</h3>
+  <div class="arch-box">
+┌─────────────────────────────────────────────────────────────┐
+│                     通知 & 触达层（企业微信原生）              │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │ 企微消息  │ │ 企微审批  │ │ 企微日程  │ │ 企微待办  │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+├─────────────────────────────────────────────────────────────┤
+│                   AI协作层（WorkBuddy CloudAgent）            │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  Expert包                                              │  │
+│  │  ├── 招聘HR专家    ├── 面试官专家                       │  │
+│  │  ├── 部门负责人专家 └── 数据分析专家                     │  │
+│  ├───────────────────────────────────────────────────────┤  │
+│  │  Skill体系: resume-parser / resume-matcher /            │  │
+│  │  interview-scheduler / offer-generator /               │  │
+│  │  interview-summary / recruitment-query                 │  │
+│  ├───────────────────────────────────────────────────────┤  │
+│  │  Automation: 每日播报 / 面试汇总 / 超时提醒 / 周报 / 归档  │  │
+│  └───────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│                     数据存储层（企业微信智能表格）             │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │活跃候选人 │ │ 面试记录  │ │ Offer记录 │ │ 归档候选人 │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+│  ┌──────────┐ ┌──────────┐                                 │
+│  │ 渠道管理  │ │ 汇总看板  │                                 │
+│  └──────────┘ └──────────┘                                 │
+└─────────────────────────────────────────────────────────────┘
+  </div>
+
+  <h3 class="section-subtitle">3.2 各层职责与选型</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>层级</th><th>职责</th><th>技术载体</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">通知触达层</span></td><td>面试提醒、进度通知、每日播报、超时预警</td><td>企微连接器（wecomcli-msg/schedule/todo）</td></tr>
+        <tr><td><span class="highlight">AI协作层</span></td><td>简历解析、智能筛选、面试协调、数据分析、自动化</td><td>WorkBuddy CloudAgent（Expert + Skill + Automation）</td></tr>
+        <tr><td><span class="highlight">数据存储层</span></td><td>候选人状态、面试记录、Offer进度、渠道数据</td><td>企业微信智能表格（10万行/表，150列上限）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">3.3 企微生态原生打通优势</h3>
+  <div class="arch-box">
+传统方案（跨平台）                    企微原生方案
+┌──────────────┐                    ┌──────────────┐
+│ 通知 → 邮件/短信                  │ 通知 → 企微消息（已读可见）│
+│ 审批 → 独立页面                   │ 审批 → 企微审批卡片（原生）│
+│ 日历 → 手动同步                   │ 日历 → wecomcli-schedule │
+│ 通讯录 → 手动维护                 │ 通讯录 → wecomcli-contact │
+│ 网盘操作 → 独立客户端             │ 微盘 → 企微原生内置      │
+└──────────────┘                    └──────────────┘
+  </div>
+</div>
+
+<!-- Section 3.5: Deployment -->
+<div id="s3b" class="section">
+  <h2 class="section-title">3.4 部署架构：云端 + 本地协同</h2>
+
+  <div class="card">
+    <div class="card-title">Core Insight</div>
+    <p>云端 WorkBuddy 企业版是<b>生产环境</b>（7x24运行，Automation定时任务，Skill统一版本，多HR共享）；本地 WorkBuddy 是<b>管理后台</b>（仅管理员用于创建Agent、配置Skill、调试发布）。HR和面试官<b>不需要安装本地 WorkBuddy</b>——通过企微 AIBot 或 Web URL 即可使用。</p>
+  </div>
+
+  <div class="arch-box">
+┌─────────────────────────────────────────────────────────────┐
+│              CloudAgent 云端（腾讯云沙箱，7x24运行）           │
+│                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ 招聘HR Expert │  │ 面试官 Expert│  │ Automation   │      │
+│  │ Agent         │  │ Agent        │  │ 定时任务调度  │      │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘      │
+│         │                 │                  │              │
+│         └────────┬────────┴──────────────────┘              │
+│                  │                                          │
+│        wecomcli-* 连接器（企微生态全部打通）                  │
+└──────────────────┬──────────────────────────────────────────┘
+                   │
+     ┌─────────────┼─────────────┐
+     ▼             ▼             ▼
+┌──────────┐ ┌──────────┐ ┌──────────────┐
+│企微智能表格│ │企微消息通知│ │企微微盘/网盘   │
+│(数据存储) │ │(触达通道) │ │(文件存储)     │
+└──────────┘ └──────────┘ └──────────────┘
+     ▲                           ▲
+     │                           │
+HR用企微AIBot对话         HR拖简历到微盘目录
+或浏览器打开Web URL        CloudAgent自动扫描处理
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>访问方式</th><th>使用者</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">企微 AIBot</span></td><td>HR / 面试官 / 部门负责人</td><td>在企微中像聊天一样操作，最自然，推荐</td></tr>
+        <tr><td><span class="highlight">Web URL</span></td><td>HR（浏览器访问）</td><td>浏览器打开链接，登录企业账号，获得独立对话Session</td></tr>
+        <tr><td><span class="highlight">本地 WorkBuddy</span></td><td>仅管理员（你）</td><td>创建Agent、配置Skill、Test Run调试、发布到云端</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">HR 零安装、零培训</div>
+    <p>HR 不需要在电脑上安装任何软件。他们打开企微找到「招聘助手」AIBot，就能像聊天一样完成所有招聘操作："帮我查今天的面试安排""帮张三约李工面试""这个候选人帮我评个分"。真正的零门槛。</p>
+  </div>
+</div>
+
+<!-- Section 4: Core Features -->
+<div id="s4" class="section">
+  <h2 class="section-title">四、核心功能模块</h2>
+
+  <h3 class="section-subtitle">4.1 功能全景：候选人全生命周期</h3>
+
+  <!-- Flowchart 1: Lifecycle -->
+  <div class="flowchart">
+    <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
+        <linearGradient id="gGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#059669"/></linearGradient>
+        <linearGradient id="gOrange" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+        <linearGradient id="gRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef4444"/><stop offset="1" stop-color="#dc2626"/></linearGradient>
+        <linearGradient id="gPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6d28d9"/></linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/></marker>
+        <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/></marker>
+        <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#10b981"/></marker>
+      </defs>
+
+      <!-- Background -->
+      <rect x="0" y="0" width="1000" height="60" rx="6" fill="rgba(59,130,246,0.08)"/>
+      <text x="500" y="25" text-anchor="middle" fill="#60a5fa" font-size="11" font-weight="700" font-family="PingFang SC, Microsoft YaHei, sans-serif">候选人全生命周期流程</text>
+      <text x="500" y="45" text-anchor="middle" fill="#64748b" font-size="10" font-family="PingFang SC, Microsoft YaHei, sans-serif">从HR操作触发 → AI自动化处理 → 企微通知触达</text>
+
+      <!-- Stage boxes -->
+      <rect x="30" y="110" width="80" height="36" rx="18" fill="url(#gBlue)" filter="url(#glow)"/>
+      <text x="70" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">需求提报</text>
+
+      <line x1="110" y1="128" x2="150" y2="128" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+      <rect x="155" y="110" width="80" height="36" rx="18" fill="url(#gBlue)"/>
+      <text x="195" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">职位发布</text>
+
+      <line x1="235" y1="128" x2="275" y2="128" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+      <rect x="280" y="110" width="80" height="36" rx="18" fill="url(#gOrange)"/>
+      <text x="320" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">简历收集</text>
+
+      <line x1="360" y1="128" x2="400" y2="128" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+      <rect x="405" y="110" width="80" height="36" rx="18" fill="url(#gOrange)"/>
+      <text x="445" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">AI初筛</text>
+
+      <line x1="485" y1="128" x2="525" y2="128" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+      <rect x="530" y="110" width="80" height="36" rx="18" fill="url(#gGreen)"/>
+      <text x="570" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">面试安排</text>
+
+      <line x1="610" y1="128" x2="650" y2="128" stroke="#10b981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+      <rect x="655" y="110" width="80" height="36" rx="18" fill="url(#gGreen)"/>
+      <text x="695" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">面试评价</text>
+
+      <line x1="735" y1="128" x2="775" y2="128" stroke="#10b981" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+      <rect x="780" y="110" width="80" height="36" rx="18" fill="url(#gPurple)"/>
+      <text x="820" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">Offer审批</text>
+
+      <line x1="860" y1="128" x2="900" y2="128" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+      <rect x="905" y="110" width="70" height="36" rx="18" fill="url(#gPurple)"/>
+      <text x="940" y="133" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">入职</text>
+
+      <!-- Second row: details -->
+      <rect x="30" y="170" width="80" height="50" rx="8" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)"/>
+      <text x="70" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">部门负责人</text>
+      <text x="70" y="206" text-anchor="middle" fill="#60a5fa" font-size="10">对话发起</text>
+
+      <rect x="155" y="170" width="80" height="50" rx="8" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.3)"/>
+      <text x="195" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">HR</text>
+      <text x="195" y="206" text-anchor="middle" fill="#60a5fa" font-size="10">多渠发布</text>
+
+      <rect x="280" y="170" width="80" height="50" rx="8" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.3)"/>
+      <text x="320" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">微盘/群聊</text>
+      <text x="320" y="206" text-anchor="middle" fill="#fbbf24" font-size="10">批量入库</text>
+
+      <rect x="405" y="170" width="80" height="50" rx="8" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.3)"/>
+      <text x="445" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">Skill: matcher</text>
+      <text x="445" y="206" text-anchor="middle" fill="#fbbf24" font-size="10">S/A/B/C分级</text>
+
+      <rect x="530" y="170" width="80" height="50" rx="8" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.3)"/>
+      <text x="570" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">Skill: scheduler</text>
+      <text x="570" y="206" text-anchor="middle" fill="#34d399" font-size="10">智能排期</text>
+
+      <rect x="655" y="170" width="80" height="50" rx="8" fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.3)"/>
+      <text x="695" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">面试官</text>
+      <text x="695" y="206" text-anchor="middle" fill="#34d399" font-size="10">对话评价</text>
+
+      <rect x="780" y="170" width="80" height="50" rx="8" fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.3)"/>
+      <text x="820" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">多级审批链</text>
+      <text x="820" y="206" text-anchor="middle" fill="#a78bfa" font-size="10">企微审批卡</text>
+
+      <rect x="905" y="170" width="70" height="50" rx="8" fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.3)"/>
+      <text x="940" y="190" text-anchor="middle" fill="#94a3b8" font-size="10">IT/行政</text>
+      <text x="940" y="206" text-anchor="middle" fill="#a78bfa" font-size="10">自动触发</text>
+
+      <!-- Rejection path -->
+      <line x1="485" y1="200" x2="485" y2="250" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <line x1="445" y1="250" x2="525" y2="250" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <rect x="460" y="260" width="50" height="28" rx="6" fill="rgba(239,68,68,0.15)" stroke="rgba(239,68,68,0.4)"/>
+      <text x="485" y="278" text-anchor="middle" fill="#fca5a5" font-size="11" font-weight="600">淘汰</text>
+
+      <!-- Bottom labels -->
+      <text x="485" y="320" text-anchor="middle" fill="#64748b" font-size="10">90天后自动归档到归档候选人表</text>
+
+      <!-- Underlying system -->
+      <rect x="30" y="350" width="940" height="50" rx="8" fill="rgba(15,23,42,0.8)" stroke="rgba(255,255,255,0.06)"/>
+      <text x="60" y="370" fill="#64748b" font-size="10">底层驱动:</text>
+      <text x="130" y="370" fill="#60a5fa" font-size="10">wecomcli-smartsheet</text>
+      <text x="280" y="370" fill="#fbbf24" font-size="10">wecomcli-msg</text>
+      <text x="390" y="370" fill="#34d399" font-size="10">wecomcli-schedule</text>
+      <text x="520" y="370" fill="#a78bfa" font-size="10">wecomcli-todo</text>
+      <text x="635" y="370" fill="#94a3b8" font-size="10">wecomcli-contact</text>
+
+      <text x="60" y="392" fill="#64748b" font-size="10">Skill:</text>
+      <text x="95" y="392" fill="#3b82f6" font-size="9">resume-parser</text>
+      <text x="205" y="392" fill="#3b82f6" font-size="9">resume-matcher</text>
+      <text x="325" y="392" fill="#3b82f6" font-size="9">interview-scheduler</text>
+      <text x="460" y="392" fill="#3b82f6" font-size="9">interview-summary</text>
+      <text x="590" y="392" fill="#3b82f6" font-size="9">offer-generator</text>
+      <text x="700" y="392" fill="#3b82f6" font-size="9">recruitment-query</text>
+    </svg>
+    <p style="color:#64748b;font-size:11px;margin-top:8px;">图1：候选人全生命周期流程 —— 9阶段流转，每个阶段标注角色、底层Skill和企微连接器</p>
+  </div>
+
+  <!-- 8 modules table -->
+  <h3 class="section-subtitle">4.2 八大模块功能总览</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模块</th><th>核心功能</th><th>WorkBuddy实现</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">职位管理</span></td><td>需求提报、审批、多渠发布</td><td>Expert:部门负责人, Automation:审批流</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td><span class="highlight">简历中心</span></td><td>多源聚合、AI解析、查重</td><td>Skill:resume-parser, 微盘批量入口</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td><span class="highlight">AI智能筛选</span></td><td>语义匹配、自动分级、理由</td><td>Skill:resume-matcher, 5维度100分制</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td><span class="highlight">面试管理</span></td><td>智能排期、结构化评分、汇总</td><td>Skill:interview-scheduler/summary, 企微日程</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td><span class="highlight">Offer与入职</span></td><td>Offer生成、审批链、入职准备</td><td>Skill:offer-generator, 企微审批卡片</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td><span class="highlight">人才库运营</span></td><td>自动归档、智能标签、再激活</td><td>Automation:季度归档, AI匹配历史库</td><td><span class="tag tag-p1">P1</span></td></tr>
+        <tr><td><span class="highlight">内推系统</span></td><td>一键推荐、进度透明、奖励</td><td>wecomcli-msg识别, Automation推送</td><td><span class="tag tag-p2">P2</span></td></tr>
+        <tr><td><span class="highlight">数据分析</span></td><td>漏斗/渠道ROI/周期/NL查询</td><td>Skill:recruitment-query, Automation周报</td><td><span class="tag tag-p1">P1</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI Screening Detail -->
+  <h3 class="section-subtitle">4.3 AI智能筛选评分模型（核心差异化能力）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>权重</th><th>满分</th><th>评估内容</th></tr></thead>
+      <tbody>
+        <tr><td>技能匹配</td><td>30%</td><td>30分</td><td>技能关键字+语义级别匹配</td></tr>
+        <tr><td>经验匹配</td><td>25%</td><td>25分</td><td>工作年限、行业经验、项目复杂度</td></tr>
+        <tr><td>学历匹配</td><td>15%</td><td>15分</td><td>学历层次+专业相关性</td></tr>
+        <tr><td>稳定性</td><td>15%</td><td>15分</td><td>跳槽频率、平均在职时长</td></tr>
+        <tr><td>综合潜力</td><td>15%</td><td>15分</td><td>技术栈广度、成长速度、项目成果</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>评分</th><th>等级</th><th>建议</th></tr></thead>
+      <tbody>
+        <tr><td>90-100分</td><td><span class="tag tag-s">S级</span></td><td>强烈推荐，建议立即联系</td></tr>
+        <tr><td>75-89分</td><td><span class="tag tag-a">A级</span></td><td>推荐，可约面试</td></tr>
+        <tr><td>60-74分</td><td>B级</td><td>可考虑，需进一步了解</td></tr>
+        <tr><td>40-59分</td><td>C级</td><td>勉强匹配，作为备选</td></tr>
+        <tr><td>&lt;40分</td><td>D级</td><td>不推荐，建议淘汰</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 5: Data Model -->
+<div id="s5" class="section">
+  <h2 class="section-title">五、数据模型设计</h2>
+
+  <h3 class="section-subtitle">5.1 候选人状态机</h3>
+  <div class="arch-box">
+                    ┌──────────┐
+                    │  初筛中   │ ← 新简历入库
+                    └─────┬────┘
+                          │
+              ┌───────────┼───────────┐
+              │ 通过      │           │ 淘汰
+              ▼           │           ▼
+         ┌──────────┐     │     ┌──────────┐
+         │  待面试   │     │     │  已淘汰   │──→ 90天后归档
+         └─────┬────┘     │     └──────────┘
+               │          │
+      ┌────────┼────────┐ │
+      │通过    │待定    │ │
+      ▼        ▼        │ │
+  ┌────────┐┌────────┐  │ │
+  │下一轮  ││  加面   │  │ │
+  └───┬────┘└───┬────┘  │ │
+      │         │        │ │
+      └─────────┘        │ │
+         │               │ │
+    循环(最多3轮+终面)    │ │
+         │               │ │
+         ▼               │ │
+    ┌──────────┐         │ │
+    │  Offer中  │←终面通过│ │
+    └─────┬────┘         │ │
+          │              │ │
+    ┌─────┼─────┐        │ │
+    │接受 │拒绝 │        │ │
+    ▼     ▼     │        │ │
+  ┌────┐┌────┐  │        │ │
+  │已入││已淘│  │        │ │
+  │职  ││汰  │  │        │ │
+  └──┬─┘└──┬─┘  │        │ │
+     │     │     │        │ │
+     └─────┴─────┴────────┘ │
+              │              │
+              ▼              │
+        90天后自动归档       │
+              └──────────────┘
+  </div>
+
+  <h3 class="section-subtitle">5.2 活跃候选人表（active_candidates）字段定义</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>字段名</th><th>类型</th><th>必填</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>candidate_id</td><td>文本（主键）</td><td>✅</td><td>CAND-YYYYMMDD-XXXXX</td></tr>
+        <tr><td>name</td><td>文本</td><td>✅</td><td>候选人姓名</td></tr>
+        <tr><td>phone</td><td>文本</td><td>—</td><td>脱敏显示 138****1234</td></tr>
+        <tr><td>email</td><td>文本</td><td>—</td><td></td></tr>
+        <tr><td>position</td><td>单选</td><td>✅</td><td>关联职位表</td></tr>
+        <tr><td>source</td><td>单选</td><td>✅</td><td>BOSS直聘/猎聘/内推/猎头/官网</td></tr>
+        <tr><td>status</td><td>单选</td><td>✅</td><td>初筛中/待面试/面试中/Offer中/已入职/已淘汰</td></tr>
+        <tr><td><span class="highlight">owner</span></td><td><span class="highlight">人员（企微成员）</span></td><td>✅</td><td>🔑 核心防并发字段，非Owner不可修改</td></tr>
+        <tr><td>match_score</td><td>数字</td><td>—</td><td>5=S/4=A/3=B/2=C/1=D</td></tr>
+        <tr><td>match_reason</td><td>多行文本</td><td>—</td><td>AI筛选理由</td></tr>
+        <tr><td>resume_file</td><td>附件</td><td>—</td><td>简历PDF/Word，≤10MB</td></tr>
+        <tr><td>tags</td><td>多选</td><td>—</td><td>AI自动生成技能标签</td></tr>
+        <tr><td>created_at</td><td>日期时间</td><td>✅</td><td>自动生成</td></tr>
+        <tr><td>updated_at</td><td>日期时间</td><td>✅</td><td>每次写入自动刷新</td></tr>
+        <tr><td>remarks</td><td>多行文本</td><td>—</td><td>协同评论（追加模式）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:#64748b;font-size:11px;margin-top:4px;">共计16列，远低于企微智能表格150列上限。Owner 字段直接关联企微通讯录，点击可发起对话。</p>
+
+  <h3 class="section-subtitle">5.3 冷热分离归档策略</h3>
+  <div class="arch-box">
+活跃候选人表(热数据)              归档候选人表(冷数据)
+┌──────────────────┐          ┌──────────────────┐
+│ 初筛中   200人    │          │ 2025年 Q1-Q2      │
+│ 面试中   150人    │  每季度  │ 已淘汰 1800人      │
+│ Offer中   30人    │  ────→  │ 已入职  120人      │
+│ 小计     380人    │  自动归档│                  │
+└──────────────────┘          ├──────────────────┤
+                              │ 2025年 Q3-Q4      │
+优化:                          │ 已淘汰 2100人      │
+- 活跃表始终 &lt;2000行          │ 已入职  150人      │
+- 查询秒级响应                 └──────────────────┘
+- 归档表按年份分智能表格
+  </div>
+
+  <h3 class="section-subtitle">5.4 权限设计（两层独立体系）</h3>
+  <div class="arch-box">
+第一层：用户文档权限（HR个人）
+├── HR专员 → 「仅浏览」→ 打开表格只能看，点不动
+├── HR主管 → 「可编辑」→ 保留应急手动操作通道
+└── 招聘总监 → 「可管理」→ 可修改表结构
+
+第二层：应用API权限（WorkBuddy）
+└── 企业微信自建应用 → 拥有智能表格读写API权限
+    └── 通过应用身份（corpid + corpsecret）调用
+    └── 与HR个人的「仅浏览」权限完全独立，互不干扰
+
+效果：
+  HR打开表格 → 只能看，改不了
+  HR对WorkBuddy说"帮我约张三面试"
+    → WorkBuddy用自己的应用权限写入 → 成功 ✅
+  </div>
+</div>
+
+<!-- Section 6: Multi-HR Collaboration -->
+<div id="s6" class="section">
+  <h2 class="section-title">六、多HR协同方案</h2>
+
+  <h3 class="section-subtitle">6.1 协同模型：Owner绑定</h3>
+  <blockquote>核心原则：<b>一个候选人一个Owner，其他HR只读+评论。</b>这和真实招聘团队的工作模式完全一致。</blockquote>
+
+  <div class="arch-box">
+协同权限模型
+├── <span class="highlight">Owner（负责人）</span>：读 + 写 + 状态变更 + Offer操作
+├── <span style="color:#94a3b8">Viewer（协作者）</span>：读 + 评论/备注
+└── <span style="color:#fbbf24">Admin（招聘主管）</span>：全部权限 + 转交 + 覆盖（有操作日志）
+  </div>
+
+  <h3 class="section-subtitle">6.2 三道防线防并发冲突</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>防线</th><th>层级</th><th>机制</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">第一道：Owner绑定</span></td><td>流程设计（治本）</td><td>候选人入库自动分配Owner，只有Owner可修改状态</td></tr>
+        <tr><td><span class="highlight">第二道：AI中间层守卫</span></td><td>技术防护</td><td>WorkBuddy写入前校验Owner身份，拦截越权操作</td></tr>
+        <tr><td><span class="highlight">第三道：版本检查</span></td><td>程序兜底</td><td>写入前比对updated_at，发现变更则放弃写入并通知</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">实际场景举例</div>
+    <p><b>HR B 对不属于自己的候选人发起操作时：</b></p>
+    <p style="color:#fbbf24">HR B："帮我淘汰张三"</p>
+    <p>WorkBuddy AI检查 → 读取Owner字段 → 发现Owner是A → <span style="color:#ef4444">拒绝操作</span></p>
+    <p style="color:#34d399">回复："张三当前由A HR负责，你无法直接操作。如果需要建议淘汰，我可以帮你在备注里留言说明理由。"</p>
+  </div>
+</div>
+
+<!-- Section 7: File Flow -->
+<div id="s7" class="section">
+  <h2 class="section-title">七、简历文件流转与批量入口</h2>
+
+  <h3 class="section-subtitle">7.1 三段式文件流转路径</h3>
+  <div class="arch-box">
+HR的电脑                     CloudAgent 沙箱              企业微信（永久存储）
+┌──────────┐    上传     ┌──────────────┐    写入     ┌──────────────┐
+│ 简历.pdf  │ ─────────→ │ 腾讯云沙箱     │ ─────────→ │ 智能表格附件   │
+│ (本地)    │            │ (临时处理)     │            │ 字段          │
+└──────────┘            └──────────────┘            └──────────────┘
+                              │                            │
+                              ▼                            │
+                        AI解析文本                         │
+                        提取结构化字段                       │
+                        处理完→清理沙箱                     │
+                              │                            │
+                              └───── 微盘「已处理」永久存档 ──┘
+  </div>
+
+  <h3 class="section-subtitle">7.2 企业微信微盘三目录模型</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>目录</th><th>HR权限</th><th>CloudAgent权限</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">📁 待处理（新简历）</span></td><td>可上传下载</td><td>可编辑</td><td>HR拖简历进来，Agent扫描处理</td></tr>
+        <tr><td>📁 已处理（已筛选）</td><td><span style="color:#34d399">仅可下载（只读）</span></td><td>可编辑</td><td>处理完移入，防止误操作</td></tr>
+        <tr><td>📁 处理异常</td><td>可上传下载</td><td>可编辑</td><td>解析失败/重复，HR可重新处理</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">7.3 四种批量简历入口</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>方案</th><th>HR操作量</th><th>适合场景</th><th>推荐度</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">微盘共享文件夹</span></td><td>拖进去就完事</td><td>日常批量（50份/次）</td><td>⭐⭐⭐⭐⭐</td></tr>
+        <tr><td><span class="highlight">企微招聘群发文件</span></td><td>零改变，本来就发群里</td><td>日常小批量（5-10份）</td><td>⭐⭐⭐⭐</td></tr>
+        <tr><td>内网共享盘 + 一台本地WB</td><td>拖到网络文件夹</td><td>内网策略严格场景</td><td>⭐⭐⭐</td></tr>
+        <tr><td>Web/企微对话逐个上传</td><td>一个一个传</td><td>偶发单份，临时分析</td><td>⭐⭐</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 8: Performance -->
+<div id="s8" class="section">
+  <h2 class="section-title">八、性能与扩展策略</h2>
+
+  <h3 class="section-subtitle">8.1 企业微信智能表格性能基准</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>指标</th><th>数值</th><th>评估</th></tr></thead>
+      <tbody>
+        <tr><td>单表行数上限</td><td><span class="highlight">10万行</span></td><td>5年不清理也不会触达</td></tr>
+        <tr><td>单表列数上限</td><td>150列</td><td>实际使用约70列，充裕</td></tr>
+        <tr><td>单元格总数上限</td><td>1500万个</td><td>等价10万行×150列</td></tr>
+        <tr><td>批量写入上限</td><td>500条/次</td><td>API批量操作</td></tr>
+        <tr><td>写入并发建议</td><td>串行，0.2-0.5s/次</td><td>HR无感知</td></tr>
+        <tr><td>附件大小上限</td><td>200MB/个</td><td>简历PDF通常&lt;5MB</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">8.2 三种规模的应对方案</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>候选人规模</th><th>方案</th><th>性能</th></tr></thead>
+      <tbody>
+        <tr><td>&lt;2000（日常活跃）</td><td>单表直接存，无需优化</td><td>秒级，无感</td></tr>
+        <tr><td>2000-10000（含历史）</td><td>冷热分离，活跃表+归档表</td><td>活跃表秒级</td></tr>
+        <tr><td>&gt;10000（多年累积）</td><td>按年归档 + 汇总看板</td><td>始终保持流畅</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">8.3 性能优化要点</h3>
+  <p>• 避免在热数据表上使用大量公式字段，计算逻辑放在WorkBuddy AI侧</p>
+  <p>• 汇总看板用Automation定时生成，不做实时聚合查询</p>
+  <p>• 归档表按年分智能表格文件，避免单表过大</p>
+  <p>• API写入串行策略：招聘场景操作频率低（50-200次/天），远低于企微API阈值</p>
+</div>
+
+<!-- Section 9: Implementation Plan -->
+<div id="s9" class="section">
+  <h2 class="section-title">九、分阶段落地计划</h2>
+
+  <h3 class="section-subtitle">9.1 Sprint 0：基础设施（1周）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>任务</th><th>产出</th></tr></thead>
+      <tbody>
+        <tr><td>企微智能表格创建（5张表+字段）</td><td>可读写智能表格就绪</td></tr>
+        <tr><td>企微自建应用权限配置</td><td>应用可读写表格、发消息、查日程</td></tr>
+        <tr><td>WorkBuddy连接器配置</td><td>所有wecomcli-*连接器可用</td></tr>
+        <tr><td>HR用户权限配置（仅浏览）</td><td>HR无法直接修改智能表格</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">9.2 Sprint 1：核心简历流程（2周）<span class="tag tag-p0">P0</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>任务</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td>resume-parser Skill开发</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>resume-matcher Skill开发（5维评分+理由生成）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>候选人入库→AI初筛自动化串联</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>候选人列表查询Skill</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>招聘HR Expert包（对话式简历管理）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>企微消息通知（入库+评分通知）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>查重功能</td><td><span class="tag tag-p1">P1</span></td></tr>
+        <tr><td>批量上传</td><td><span class="tag tag-p1">P1</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <blockquote>Sprint 1 交付后可验证：HR能通过对话上传简历、AI自动评分、对话查询候选人列表。</blockquote>
+
+  <h3 class="section-subtitle">9.3 Sprint 2：面试管理（2周）<span class="tag tag-p0">P0</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>任务</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td>interview-scheduler Skill（基于日程推荐时段）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>面试邀请发送（企微消息+日程写入）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>面试官Expert包（确认/评价）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>interview-summary Skill（多轮汇总）</td><td><span class="tag tag-p1">P1</span></td></tr>
+        <tr><td>面试提醒Automation（前1小时提醒）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>每日播报Automation</td><td><span class="tag tag-p1">P1</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">9.4 Sprint 3：Offer与协同（2周）<span class="tag tag-p0">P0</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>任务</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td>offer-generator Skill</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>Offer审批流（企微审批+状态管理）</td><td><span class="tag tag-p0">P0</span></td></tr>
+        <tr><td>入职准备Automation（IT/行政/HR待办）</td><td><span class="tag tag-p1">P1</span></td></tr>
+        <tr><td>Owner绑定机制 + AI中间层守卫</td><td><span class="tag tag-p1">P1</span></td></tr>
+        <tr><td>评价催办Automation（24h未评提醒）</td><td><span class="tag tag-p1">P1</span></td></tr>
+        <tr><td>周报Automation</td><td><span class="tag tag-p1">P1</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">9.5 Sprint 4+：增强功能（持续）<span class="tag tag-p2">P2</span></h3>
+  <p>人才库归档Automation、再激活推荐Skill、内推识别与进度通知、自然语言数据查询、渠道ROI汇总。</p>
+
+  <div class="card">
+    <div class="card-title">总研发周期预估</div>
+    <p>Sprint 0-3 约 <span class="highlight">7周</span> 可交付完整MVP。Sprint 1结束后即可开始内部试用。</p>
+  </div>
+</div>
+
+<!-- Section 10: WorkBuddy Components -->
+<div id="s10" class="section">
+  <h2 class="section-title">十、WorkBuddy组件规格</h2>
+
+  <h3 class="section-subtitle">10.1 Expert包定义</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Expert包</th><th>核心能力</th><th>可调用Skill</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">招聘HR专家</span></td><td>候选人管理、面试安排、Offer管理、数据查询、通知触达</td><td>resume-parser, resume-matcher, interview-scheduler, offer-generator, interview-summary, recruitment-query</td></tr>
+        <tr><td><span class="highlight">面试官专家</span></td><td>查看简历和AI报告、确认/改期面试、填写结构化评价、查看面试日历</td><td>interview-feedback</td></tr>
+        <tr><td>部门负责人专家</td><td>需求审批、候选人终审</td><td>recruitment-query</td></tr>
+        <tr><td>数据分析专家</td><td>招聘漏斗、渠道ROI、周期分析、NL查询</td><td>recruitment-query</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">10.2 Skill清单</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Skill名称</th><th>功能</th><th>输入</th><th>输出</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">resume-parser</span></td><td>简历解析</td><td>PDF/Word/图片</td><td>结构化信息 + confidence</td></tr>
+        <tr><td><span class="highlight">resume-matcher</span></td><td>AI匹配评分</td><td>candidate_id + position_id</td><td>5维评分 + 理由 + 风险标记</td></tr>
+        <tr><td><span class="highlight">interview-scheduler</span></td><td>面试排期</td><td>面试官列表 + 天数范围</td><td>推荐时段列表</td></tr>
+        <tr><td><span class="highlight">offer-generator</span></td><td>Offer生成</td><td>候选人+薪资+入职日期</td><td>Offer文本（Markdown）</td></tr>
+        <tr><td><span class="highlight">interview-summary</span></td><td>面试汇总</td><td>candidate_id</td><td>多轮汇总 + 综合建议</td></tr>
+        <tr><td><span class="highlight">recruitment-query</span></td><td>数据查询</td><td>自然语言问题</td><td>结构化结果 + NL解释</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">10.3 Automation清单</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Automation</th><th>触发时间</th><th>输出通道</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">每日招聘播报</span></td><td>工作日 9:00</td><td>企微消息（HR群）</td></tr>
+        <tr><td><span class="highlight">每日面试反馈汇总</span></td><td>工作日 18:00</td><td>企微消息</td></tr>
+        <tr><td><span class="highlight">超时未跟进提醒</span></td><td>工作日 10:00</td><td>企微个人消息</td></tr>
+        <tr><td><span class="highlight">每周招聘周报</span></td><td>每周一 9:30</td><td>企微消息 + 汇总看板</td></tr>
+        <tr><td><span class="highlight">季度归档</span></td><td>每季度第1个周日 2:00</td><td>企微智能表格操作</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 11: Risk -->
+<div id="s11" class="section">
+  <h2 class="section-title">十一、风险与应对</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>风险</th><th>等级</th><th>应对措施</th></tr></thead>
+      <tbody>
+        <tr><td>企微智能表格行数接近上限</td><td><span class="tag tag-a">低</span></td><td>按季度归档+按年分表，可撑5年以上</td></tr>
+        <tr><td>企微API写入串行瓶颈</td><td><span class="tag tag-a">低</span></td><td>单次0.2-0.5秒，HR操作频率远低此值</td></tr>
+        <tr><td>Owner绑定后人力不足</td><td><span class="tag tag-a">中</span></td><td>支持批量转交+自动负载均衡分配</td></tr>
+        <tr><td>WorkBuddy AI误判导致错误操作</td><td><span class="tag tag-a">中</span></td><td>关键操作（发Offer、淘汰）需二次确认</td></tr>
+        <tr><td>候选人隐私数据合规</td><td><span class="tag tag-a">中</span></td><td>字段级权限控制+定期清理+满足个保法</td></tr>
+        <tr><td>企微智能表格服务不可用</td><td><span class="tag tag-a">低</span></td><td>SLA 99.9%+核心数据定期导出备份</td></tr>
+        <tr><td>WorkBuddy平台演进方向变化</td><td><span class="tag tag-a">中</span></td><td>三层解耦，AI层可迁移，数据层独立</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 12: Acceptance Criteria -->
+<div id="s12" class="section">
+  <h2 class="section-title">十二、验收测试标准</h2>
+
+  <h3 class="section-subtitle">12.1 功能验收</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>验收项</th><th>标准</th></tr></thead>
+      <tbody>
+        <tr><td>简历解析准确率</td><td>姓名/手机/邮箱 ≥95%，学历/年限 ≥90%</td></tr>
+        <tr><td>AI评分可用性</td><td>评分与HR判断一致率 ≥70%（基线）</td></tr>
+        <tr><td>面试排期成功率</td><td>推荐第一个时段被采纳率 ≥50%</td></tr>
+        <tr><td>消息触达率</td><td>企微消息到达率 ≥99%，延迟 &lt;10秒</td></tr>
+        <tr><td>无并发冲突</td><td>两周内零"覆盖写入"事故</td></tr>
+        <tr><td>备份恢复</td><td>备份数据可完整恢复</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">12.2 性能验收</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>操作</th><th>标准</th></tr></thead>
+      <tbody>
+        <tr><td>单份简历解析入库</td><td>&lt;60秒（含AI评分）</td></tr>
+        <tr><td>批量5份简历入库</td><td>&lt;5分钟</td></tr>
+        <tr><td>候选人列表查询</td><td>&lt;10秒</td></tr>
+        <tr><td>智能排期推荐</td><td>&lt;30秒</td></tr>
+        <tr><td>企微消息发送</td><td>&lt;5秒</td></tr>
+        <tr><td>活跃表日常操作</td><td>所有读写&lt;2秒</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Section 13: Decision Records -->
+<div id="s13" class="section">
+  <h2 class="section-title">十三、附录：关键设计决策记录</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>决策</th><th>选项A</th><th>选项B</th><th>最终选择</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr><td><span class="highlight">AI引擎</span></td><td>WorkBuddy</td><td>自建AI服务</td><td>WorkBuddy</td><td>零研发成本、对话式交互、Skill生态</td></tr>
+        <tr><td><span class="highlight">数据存储</span></td><td>企微智能表格</td><td>自建数据库</td><td>企微智能表格</td><td>零搭建、与企微生态原生打通、10万行充裕</td></tr>
+        <tr><td><span class="highlight">候选人端</span></td><td>自建H5</td><td>复用招聘平台</td><td>MVP期复用平台</td><td>快速上线验证核心价值</td></tr>
+        <tr><td><span class="highlight">协同模式</span></td><td>自由协作</td><td>Owner绑定</td><td>Owner绑定</td><td>消除并发冲突，匹配真实工作模式</td></tr>
+        <tr><td><span class="highlight">性能策略</span></td><td>单表全量</td><td>冷热分离</td><td>冷热分离</td><td>确保长期运行不降速</td></tr>
+        <tr><td><span class="highlight">通知通道</span></td><td>邮件/短信</td><td>企微消息</td><td>企微消息</td><td>零成本、已读可见、与日常办公合一</td></tr>
+        <tr><td><span class="highlight">HR操作终端</span></td><td>安装本地WB</td><td>企微AIBot/Web URL</td><td>企微AIBot</td><td>零安装、零培训、企微原生</td></tr>
+        <tr><td><span class="highlight">批量简历入口</span></td><td>逐个Web上传</td><td>微盘三目录</td><td>微盘三目录</td><td>拖入即处理，效率最高</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="section-subtitle">变更记录</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>版本</th><th>日期</th><th>变更内容</th></tr></thead>
+      <tbody>
+        <tr><td>V1.0</td><td>2026-06-08</td><td>初始版本（基于飞书多维表格）</td></tr>
+        <tr><td>V1.1</td><td>2026-06-08</td><td>全量切换为企业微信智能表格版本</td></tr>
+        <tr><td>V1.2</td><td>2026-06-08</td><td>新增CloudAgent云端部署架构、微盘批量入口、HR零安装方案、HTML版交付</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>智能招聘系统 — 产品需求文档 PRD V1.2</p>
+  <p>基于 WorkBuddy AI Agent 平台 + 企业微信生态 | 2026-06-08 | 内部 · 待评审</p>
+</div>
+
+</div><!-- .main -->
+
+<!-- Smooth scroll JS -->
+<script>
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+
+// Highlight active nav on scroll
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('.section, .cover');
+  const navItems = document.querySelectorAll('.nav-item');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) {
+      current = s.id;
+    }
+  });
+  if (current) {
+    navItems.forEach(item => {
+      item.classList.remove('active');
+      if (item.getAttribute('href') === '#' + current) {
+        item.classList.add('active');
+      }
+    });
+  }
+});
+</script>
+
+</body>
+</html>
